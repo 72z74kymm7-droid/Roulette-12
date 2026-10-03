@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1–12 Рулетка</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle,#303030,#0d0d0d);color:white;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;padding:20px}
+.app{text-align:center;width:100%;max-width:430px}
+h1{margin:0 0 8px;font-size:32px}.sub{color:#aaa;margin-bottom:22px}
+.wheelBox{position:relative;width:min(86vw,350px);height:min(86vw,350px);margin:auto}
+.pointer{position:absolute;z-index:5;top:-2px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:17px solid transparent;border-right:17px solid transparent;border-top:34px solid #ffd54a;filter:drop-shadow(0 2px 3px #000)}
+.wheel{width:100%;height:100%;border-radius:50%;border:9px solid #d8d8d8;position:relative;overflow:hidden;box-shadow:0 0 35px #000;transition:transform 4s cubic-bezier(.12,.72,.16,1);background:conic-gradient(#c62828 0deg 30deg,#202020 30deg 60deg,#c62828 60deg 90deg,#202020 90deg 120deg,#c62828 120deg 150deg,#202020 150deg 180deg,#c62828 180deg 210deg,#202020 210deg 240deg,#c62828 240deg 270deg,#202020 270deg 300deg,#c62828 300deg 330deg,#159447 330deg 360deg)}
+.num{position:absolute;left:50%;top:50%;font-size:20px;font-weight:800;width:34px;height:34px;line-height:34px;margin-left:-17px;margin-top:-17px;text-shadow:0 2px 3px #000}
+.center{position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#ddd;border:7px solid #555;box-shadow:0 2px 8px #000}
+button{margin-top:25px;width:100%;padding:16px;border:0;border-radius:14px;background:#ffd54a;color:#111;font-size:20px;font-weight:800;box-shadow:0 5px 15px #000}
+button:disabled{opacity:.55}
+.result{margin-top:20px;min-height:42px;font-size:25px;font-weight:800}.small{font-size:13px;color:#888;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="app">
+<h1>🎰 РУЛЕТКА</h1>
+<div class="sub">1ден 12ге чейинки кокустук сан</div>
+<div class="wheelBox">
+<div class="pointer"></div>
+<div id="wheel" class="wheel"></div>
+<div class="center"></div>
+</div>
+<button id="spin">АЙЛАНТУУ 🎰</button>
+<div id="result" class="result">Санды тандаш үчүн айлант</div>
+<div class="small">Ар бир айлантууда 1–12 арасынан бир сан кокус тандалат.</div>
+</div>
+<script>
+const wheel=document.getElementById('wheel');
+const result=document.getElementById('result');
+const btn=document.getElementById('spin');
+for(let n=1;n<=12;n++){
+  const el=document.createElement('div');
+  el.className='num';
+  const angle=(n-1)*30+15;
+  const r=39;
+  el.textContent=n;
+  el.style.transform=`rotate(${angle}deg) translateY(-${r*3.55}px) rotate(-${angle}deg)`;
+  wheel.appendChild(el);
+}
+let rotation=0,busy=false;
+btn.onclick=()=>{
+ if(busy)return;
+ busy=true;btn.disabled=true;
+ const n=Math.floor(Math.random()*12)+1;
+ const target=(n-1)*30+15;
+ const extra=1440;
+ rotation+=extra+(360-target);
+ wheel.style.transform=`rotate(${rotation}deg)`;
+ result.textContent='Айланууда...';
+ setTimeout(()=>{
+   result.textContent='🎉 Натыйжа: '+n;
+   busy=false;btn.disabled=false;
+ },4100);
+};
+</script>
+</body>
+</html>
